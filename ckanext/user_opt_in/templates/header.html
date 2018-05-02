@@ -1,0 +1,26 @@
+{% ckan_extends %}
+
+{% block header_account %}
+
+  {# Insert the contents of the original header_account block: #}
+  {{ super() }}
+  {% resource 'user_opt_in/module.js' %}
+  {% if c.userobj and h.is_user_opted_in_unknown() %}
+<div class="modal-user-opt-in modal fade in hide" data-module="user_opt_in_popup" tabindex="-1" role="dialog">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></a>
+    <h3>Research Opt-In</h3>
+  </div>
+  <div class="modal-body">
+    <p>You can opt-in to the research component of the Land and Water Digital Asset Registry</p>
+    <p>By opting in, you agree to have your user actions made available for research purposes.</p>
+  </div>
+    <div class="modal-footer">
+      <a class="btn btn-primary btn-large" href="#" data-dismiss="modal">Ask again later</a>
+      <a class="btn btn-warning btn-large user_opt_in_set_opt_out" href="#">Opt-Out</a>
+      <a class="btn btn-success btn-large user_opt_in_set_opt_in" href="#">Opt-In</a>
+    </div>
+</div>
+  {% endif %}
+{% endblock %}
+
