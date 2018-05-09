@@ -6,19 +6,28 @@
   {{ super() }}
   {% resource 'user_opt_in/module.js' %}
   {% if c.userobj and h.is_user_opted_in_unknown() %}
-<div class="modal-user-opt-in modal fade in hide" data-module="user_opt_in_popup" tabindex="-1" role="dialog">
+<div class="modal-user-opt-in modal fade in hide" style="width: 800px;" data-module="user_opt_in_popup" tabindex="-1" role="dialog">
   <div class="modal-header">
     <a class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></a>
-    <h3>Research Opt-In</h3>
+    <h3>Welcome!&nbsp;<i class="fa fa-thumbs-o-up"></i></h3>
   </div>
-  <div class="modal-body">
-    <p>You can opt-in to the research component of the Land and Water Digital Asset Registry</p>
-    <p>By opting in, you agree to have your user actions made available for research purposes.</p>
+  <div class="modal-body" style="max-height:600px;">
+    <p>
+      You have successfully logged in to the CSIRO L&W Digital Asset Registry. As a logged in user, you will be able to register digital assets and in doing so will help their discovery by others. The registry exists to support research in CSIRO L&W by enabling discovery of existing assets, integrate with other relevant information and data systems, and facilitate conversations about improved digital asset management to aid the broader research process (see below).
+    </p>
+    <p>
+      <img src="/images/digital-asset-lifecycle2.png" style="width: 60%; margin: 0px auto;" alt="Digital Asset Lifecycle Diagram" />
+    </p>
+    <p>Whilst the platform has been developed as an internal tool to support activities related to the digital asset lifecycle, we would also like to use this registry to collect research data on how users interact with the system and optimise its usage. e.g. scientific themes published by aggregated teams?</p>
+    <p>Giving us consent to use your personal or activity information for this research is completely voluntary. If you do not wish to provide consent for your information to be used for research purposes, you can utilise the registry for its primary purposes - audit, discovery and digital asset management. Personal or activity information you generate through the registry for this research will be reported in a de-identified form to ensure participants are not individually identifiable. Results from this research may be published in scientific papers, reports and conference presentations.</p>
+    <p>If you choose to opt-out, we will not use your personal or activity information in these publications.</p>
+    <p>If you have any questions or concerns, please feel free to contact the project leader, Dr Jonathan Yu, on 03 9545 2457 or at <a href="mailto:jonathan.yu@csiro.au">jonathan.yu@csiro.au</a>. Should you wish to discuss any aspects of this research with someone outside of the project team, please contact the Manager of Social Responsibility and Ethics on 07 3833 5693 or at <a href="mailto:csshrec@csiro.au">csshrec@csiro.au</a>.</p>
+    <p style="font-weight: bold; font-style: italic;">Do you consent/agree?</p>
   </div>
     <div class="modal-footer">
       <a class="btn btn-primary btn-large" href="#" data-dismiss="modal">Ask again later</a>
-      <a class="btn btn-warning btn-large user_opt_in_set_opt_out" href="#">Opt-Out</a>
-      <a class="btn btn-success btn-large user_opt_in_set_opt_in" href="#">Opt-In</a>
+      <a class="btn btn-warning btn-large user_opt_in_set_opt_out" href="#">No / Opt-Out</a>
+      <a class="btn btn-success btn-large user_opt_in_set_opt_in" href="#">Yes / Opt-In</a>
     </div>
 </div>
   {% endif %}
