@@ -1,7 +1,54 @@
 # -*- coding: utf-8 -*-
+import setuptools
 from setuptools import setup, find_packages  # Always prefer setuptools over distutils
 from codecs import open  # To use a consistent encoding
 from os import path
+import logging
+
+logging.basicConfig(level=logging.INFO)
+log = logging.getLogger(__name__)
+st_vers = setuptools.__version__
+log.info("Using setuptools v{}".format(str(st_vers)))
+try:
+    try:
+        import packaging # direct use
+    except ImportError:
+        # v39.0 and above.
+        try:
+            from setuptools.extern import packaging
+        except ImportError:
+            # Before v39.0
+            from pkg_resources.extern import packaging
+    version = packaging.version
+except ImportError:
+    raise RuntimeError("The 'packaging' library is missing.")
+
+try:
+    import ckan
+    from ckan.plugins import toolkit
+except ImportError as e:
+    raise RuntimeError("CKAN must be installed before this plugin.")
+
+try:
+    import ckanext.user_ext
+except ImportError as e:
+    raise RuntimeError(
+        "ckanext-user_ext must be installed before this plugin.")
+
+try:
+    import sqlalchemy
+except ImportError as e:
+    raise RuntimeError("SQLAlchemy should have been installed with CKAN.")
+sa_vers = version.parse(sqlalchemy.__version__)
+log.info("Found SQLAlchemy {} ...".format(str(sa_vers)))
+min_sa_vers = version.parse("0.9.6")
+max_sa_vers = version.parse("1.1.11")
+if sa_vers < min_sa_vers:
+    raise RuntimeError(
+        "Version of SQLAlchemy must be >= {}".format(str(min_sa_vers)))
+if sa_vers > max_sa_vers:
+    raise RuntimeError(
+        "Version of SQLAlchemy must be <= {}".format(str(max_sa_vers)))
 
 here = path.abspath(path.dirname(__file__))
 
@@ -61,6 +108,7 @@ setup(
       # ``requirements.txt`` file.
       #
       # http://docs.ckan.org/en/latest/extensions/best-practices.html#add-third-party-libraries-to-requirements-txt
+      "SQLAlchemy=={}".format(sqlalchemy.__version__),  # redundant, I know.
     ],
 
     # If there are data files included in your packages that need to be
