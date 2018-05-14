@@ -1,10 +1,14 @@
+# encoding: utf-8
 import logging
 from functools import partial
 
 from sqlalchemy import Column, Boolean
 
+from ckan import __version__ as ckan__version__
 from ckan.plugins import implements, SingletonPlugin
 from ckan.plugins import IConfigurer, ITemplateHelpers, IRoutes
+import ckan.plugins.toolkit as toolkit
+
 
 try:
     import ckanext.user_ext
@@ -12,11 +16,11 @@ except ImportError:
     raise RuntimeError("UserOptIn Plugin relies on the UserExt plugin.")
 
 from ckanext.user_ext.interfaces import IUserExt, IUserExtension
-
-import ckan.plugins.toolkit as toolkit
-
 from controller import UserOptInController
 from model import UserOptInModel
+from util import version
+
+ckan_version = version.parse(ckan__version__)
 
 log = logging.getLogger(__name__)
 
@@ -72,7 +76,14 @@ class UserOptInPlugin(SingletonPlugin):
         # that CKAN will use this plugin's custom templates.
         # 'templates' is the path to the templates dir, relative to this
         # plugin.py file.
+
+        # first defined templates are higher priority
+        if ckan_version < version.parse("2.8.0"):
+            # override some parts with bootstrap2 templates if needed
+            toolkit.add_template_directory(config, 'templates-bs2')
+        # fallback to Bootstrap3 templates.
         toolkit.add_template_directory(config, 'templates')
+
 
         # Add this plugin's public dir to CKAN's extra_public_paths, so
         # that CKAN will use this plugin's custom static files.
