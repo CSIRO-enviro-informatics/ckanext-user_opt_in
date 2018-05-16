@@ -80,7 +80,7 @@ class UserOptInPlugin(SingletonPlugin):
         # first defined templates are higher priority
         if ckan_version < version.parse("2.8.0"):
             # override some parts with bootstrap2 templates if needed
-            toolkit.add_template_directory(config, 'templates-bs2')
+            toolkit.add_template_directory(config, 'bs2-templates')
         # fallback to Bootstrap3 templates.
         toolkit.add_template_directory(config, 'templates')
 
