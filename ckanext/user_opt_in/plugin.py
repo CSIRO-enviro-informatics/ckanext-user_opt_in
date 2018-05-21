@@ -49,6 +49,31 @@ def is_user_opted_in_unknown(controller):
     return controller.is_opted_in_unknown(_id)
 
 
+def is_ckan_2_8_0():
+    if ckan_version >= version.parse("2.8.0"):
+        return True
+    return False
+
+
+def is_bootstrap_2():
+    config = toolkit.config
+    try:
+        base_templates = config["ckan.base_templates_folder"]
+    except (KeyError, AttributeError, IndexError):
+        base_templates = None
+    try:
+        base_public = config["ckan.base_public_folder"]
+    except (KeyError, AttributeError, IndexError):
+        base_public = None
+    if (base_public and "bs2" in base_public) or \
+            (base_templates and "bs2" in base_templates):
+        return True
+    if base_templates is None and base_public is None:
+        # CKAN 2.8.0 defaults to bootstrap3
+        return not bool(is_ckan_2_8_0())
+    return False
+
+
 class UserOptInPlugin(SingletonPlugin):
     implements(IUserExt)
     implements(IUserExtension)
@@ -78,12 +103,14 @@ class UserOptInPlugin(SingletonPlugin):
         # plugin.py file.
 
         # first defined templates are higher priority
-        if ckan_version < version.parse("2.8.0"):
+        if is_bootstrap_2():
             # override some parts with bootstrap2 templates if needed
             toolkit.add_template_directory(config, 'bs2-templates')
-        # fallback to Bootstrap3 templates.
-        toolkit.add_template_directory(config, 'templates')
+        else:
+            toolkit.add_template_directory(config, 'bs3-templates')
 
+        # This is the template code shared between bs2 and bs3.
+        toolkit.add_template_directory(config, 'templates')
 
         # Add this plugin's public dir to CKAN's extra_public_paths, so
         # that CKAN will use this plugin's custom static files.
@@ -122,6 +149,10 @@ class UserOptInPlugin(SingletonPlugin):
 
     # TemplateHelpers
     def get_helpers(self):
-        return {'is_user_opted_in': partial(is_user_opted_in, self.controller),
-                'is_user_opted_out': partial(is_user_opted_out, self.controller),
-                'is_user_opted_in_unknown': partial(is_user_opted_in_unknown, self.controller)}
+        return {
+            'is_bootstrap_2': is_bootstrap_2,
+            'is_ckan_2_8_0': is_ckan_2_8_0,
+            'is_user_opted_in': partial(is_user_opted_in, self.controller),
+            'is_user_opted_out': partial(is_user_opted_out, self.controller),
+            'is_user_opted_in_unknown': partial(is_user_opted_in_unknown, self.controller)
+        }
