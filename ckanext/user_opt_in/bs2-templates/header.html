@@ -3,12 +3,12 @@
 {% block header_account %}
   {{ super() }}
   {% if c.userobj and h.is_user_opted_in_unknown() %}
-<div class="modal-user-opt-in modal fade in hide" style="box-sizing: border-box; width: 800px; margin-left:-400px;" data-module="user_opt_in_popup" tabindex="-1" role="dialog" aria-labelledby="opt-in-modal-title">
+<div class="modal-user-opt-in modal fade in hide" style="box-sizing: border-box; width: 900px; margin-left:-450px; overflow-y: auto; max-height: 578px; top: 4%;" data-module="user_opt_in_popup" tabindex="-1" role="dialog" aria-labelledby="opt-in-modal-title">
   <div class="modal-header">
     <a class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></a>
     <h3 class="modal-title" id="opt-in-modal-title">&#127881;&nbsp;Welcome!&nbsp;<i class="fa fa-thumbs-o-up"></i></h3>
   </div>
-  <div class="modal-body" style="max-height:590px;">
+  <div class="modal-body" style="max-height:525px;">
     {% snippet 'opt-in/snippets/modal-content.html' %}
   </div>
   <div class="modal-footer">
